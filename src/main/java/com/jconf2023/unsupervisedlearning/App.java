@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
-// https://www.kaggle.com/datasets/sriramm2010/uci-bike-sharing-data
+// Dataset utilizado: https://www.kaggle.com/datasets/sriramm2010/uci-bike-sharing-data
 public class App 
 {
     public static void main( String[] args )
@@ -191,9 +191,12 @@ public class App
         for (Vector center: centers) {
             System.out.println(center);
         }
+
+        // Detenemos la aplicacion y asi finalizamos la sesion que se almacena en memoria.
+        spark.stop();
     }
 
-    // TODO: OneHot vector to Vector function.
+    // OneHot vector to Vector function.
     public static Dataset<Row> oneHotToDfColumn(Dataset<Row> columnDf, String columnName, String[] values, SparkSession sp) {
         StructField[] schemaFields = new StructField[values.length];
 
@@ -201,10 +204,10 @@ public class App
             schemaFields[i] = new StructField(columnName + values[i], DataTypes.DoubleType, false, Metadata.empty());
         }
 
-        // Creating the new schema for the newest OneHot encoded columns.
+        // Creando un nuevo schema para las nuevas columnas codificadas con OneHot.
         StructType schema = new StructType(schemaFields);
 
-        // Reestructuring the new encoded values.
+        // Reestructurando los nuevos valores codificados.
         Iterator<Row> it = columnDf.toLocalIterator();
         List<Row> data = new ArrayList<>();
 
